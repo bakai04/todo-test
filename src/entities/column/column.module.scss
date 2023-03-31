@@ -1,0 +1,23 @@
+@import "@/shared/styles/_root.scss";
+.content {
+  background-color: #e4e4e4;
+  height: 100%;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 10px;
+  min-width: 280px;
+
+  .content__block {
+    border-radius: 8px;
+    background-color: $primaryColor;
+    padding: 6px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .title,
+    .number {
+      color: #fff;
+      font-size: 20px;
+    }
+  }
+}
