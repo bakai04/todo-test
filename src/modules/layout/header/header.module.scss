@@ -2,28 +2,14 @@
 
 .wrapper {
   width: 100%;
-  max-width: $xl;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px 0;
+
   .logo {
-    color: $primaryColor;
-  }
-  .button {
-    background: $primaryColor;
-    border-radius: 8px;
-    height: 42px;
-    width: 200px;
-    border-style: 10px;
-    font-size: 20px;
-    color: white;
-    cursor: pointer;
-    transition: 0.3s;
-    &:hover {
-      transform: translateY(-2px);
-    }
+    color: #FFF;
   }
 }
 

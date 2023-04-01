@@ -1,22 +1,19 @@
 import { FC } from "react";
-import { Column, Task } from "@/entities";
 import { useAppSelector } from "@/store/store";
 import styles from "./task-list.module.scss";
-import { IColumn, TaskStates } from "@/store/tasksSlice";
-
-
-
-
+import { Column } from "@/entities";
+import { CreateColumn } from "@/entities/column/create";
 
 export const TaskList: FC = () => {
-  const tasks = useAppSelector((state) => state.tasks);
+  const columns = useAppSelector((state) => state.column);
   return (
     <div className={styles.container}>
       {
         columns.map((elem) => (
-          <Column name={elem.title} key={elem.id} columnName={elem.id} tasks={tasks} />
+          <Column columnData={elem} key={elem.id}/>
         ))
       }
+      <CreateColumn/>
     </div>
   );
 };

@@ -1,8 +1,7 @@
 import { actualGetData } from "@/shared/lib";
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
-
-export type TaskStates = "new" | "inProgress" | "cancelled" | "completed" | null;
+import { columns, IColumn } from "./columnSlice";
 
 export interface ITask {
   id: string;
@@ -11,86 +10,59 @@ export interface ITask {
   completedAt?: string | null;
   cancelledAt?:string | null;
   description: string;
-  status: TaskStates; 
+  status: IColumn; 
 }
 
-export interface IColumn {
-  id: TaskStates,
-  title: string,
-  tasks?: ITask[]
+type ColumnId = IColumn['id'];
+
+export interface ITasks {
+  [key:ColumnId]: ITask[]
 }
 
-const columns: IColumn[] = [
-  {
-    id: "new",
-    title: "Новое",
-    tasks: [],
-  },
-  {
-    id: "inProgress",
-    title: "В процессе",
-    tasks: [],
-  },
-  {
-    id: "cancelled",
-    title: "Отменённые",
-    tasks: [],
-  },
-  {
-    id: "completed",
-    title: "Завершённые",
-    tasks: [],
-  },
-]
 
-const initialState: ITask[] = []
-
+const initialState: ITasks = {}
 const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
 
-    addTask: (state, { payload }) => {
-      return [
-        ...state,
-        { id: nanoid(), status: "new", createdAt: actualGetData(), ...payload },
-      ];
+    createTask: (state, { payload }) => {
+      const { newTask, column} = payload
+      if( state[column.id] ) {
+        state[column.id] = [...state[column.id], { id: nanoid(), status: column, createdAt: actualGetData(), ...newTask }]
+      } else {
+        state[column.id] = [{ id: nanoid(), status: column, createdAt: actualGetData(), ...newTask }]
+      }
     },
 
     changeTaskStatus: (state, { payload }) => {
-        const { id, nextColumn } = payload;
-        const task = state.find((t) => t.id === id);
-        if (task) {
-          task.status = nextColumn;
-          switch (nextColumn) {
-            case "completed":
-              task.completedAt = actualGetData();
-              task.cancelledAt = null;
-              break;
-            case "cancelled":
-              task.cancelledAt = actualGetData();
-              task.completedAt = null;
-              break;
-            default:
-              task.completedAt = null;
-              task.cancelledAt = null;
-              break;
-          }
-        }
+      const { task, nextColumn } = payload;
+      state[task.status.id] = state[task.status.id].filter((t) => t.id !== task.id);
+      
+      if (nextColumn && state[nextColumn.id]) {
+        state[nextColumn.id] = [...state[nextColumn.id], {...task, status: nextColumn}];
+      } else {
+        state[nextColumn.id] = [{...task, status: nextColumn}];
+      }
     },
 
-    editTask: (state, action) => { 
-	  	state = state.map((elem) => {
-	  		if(elem.id === action.payload.id) {
-	  			return {...elem, ...action.payload}
+    deleteTask: (state, { payload }) => {
+      state[payload.status.id] = state[payload.status.id].filter((t) => t.id !== payload.id);
+    },
+
+
+    editTask: (state, { payload }) => { 
+	  	state[payload.status.id] = state[payload.status.id].map((elem) => {
+	  		if(elem.id === payload.id) {
+	  			return {...elem, ...payload}
 	  		}
 	  		return elem;
 	  	})
 	  	return state
+      },
     },
-  },
 });
 
 
-export const { addTask, editTask,changeTaskStatus} = tasksSlice.actions;
+export const { createTask, editTask, changeTaskStatus, deleteTask} = tasksSlice.actions;
 export default tasksSlice;

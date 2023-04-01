@@ -1,49 +1,32 @@
 import React, { useState, FC, FormEvent, FocusEvent } from "react";
-import { useDispatch } from "react-redux";
-import { createTask } from "@/store/tasksSlice";
 import { toast } from "react-toastify";
 
-import styles from "./create-task.module.scss";
-import { IColumn } from "@/store/columnSlice";
+import styles from "./create-column.module.scss";
+import { useAppDispatch } from "@/store/store";
+import { createColumn } from "@/store/columnSlice";
 
 interface Props {
   onClose: () => void;
-  column: IColumn
 }
 
-export const TaskForm: FC<Props> = ({ onClose, column }) => {
-  const dispatch = useDispatch();
+export const ColumnForm: FC<Props> = ({ onClose }) => {
+  const dispatch = useAppDispatch();
   const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
 
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
-  const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setDescription(event.target.value);
-  };
-
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    if (title.trim() && description.trim()) {
+    if (title.trim()) {
       dispatch(
-        createTask({
-          newTask: {
-            title: title.trim(),
-            description: description.trim(),
-          },
-          column: column
+        createColumn({
+          title: title.trim(),
         })
       );
-
       setTitle("");
-      setDescription("");
-
       toast("Task created successfully!");
       onClose();
     } else {
@@ -74,22 +57,8 @@ export const TaskForm: FC<Props> = ({ onClose, column }) => {
         )}
       </div>
 
-      <div className={styles.form_description}>
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          placeholder="Enter a task description"
-          value={description}
-          onChange={handleDescriptionChange}
-          onBlur={handleBlur}
-        />
-        {error && !description.trim() && (
-          <p className={styles.error}>Please enter a description.</p>
-        )}
-      </div>
-
       <div className={styles.buttons}>
-        <button type="submit">Add Task</button>
+        <button type="submit">Create Column</button>
         <button type="button" onClick={onClose}>
           Cancel
         </button>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addTask, editTask, ITask } from "@/store/tasksSlice";
+import { editTask, ITask } from "@/store/tasksSlice";
 import styles from "./edit-task.module.scss";
 import { useAppDispatch } from "@/store/store";
 
@@ -39,6 +39,7 @@ const EditForm: React.FC<IEditFormProps> = ({ onClose, task }) => {
     if (title.trim() !== "" && description.trim() !== "") {
       dispatch(
         editTask({
+          ...task,
           title: title.trim(),
           description: description.trim(),
           id: task.id,

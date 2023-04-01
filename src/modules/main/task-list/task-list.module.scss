@@ -1,9 +1,6 @@
 .container {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
   gap: 10px;
-  overflow-x: scroll;
-  &::-webkit-scrollbar {
-    width: 0;
-  }
+  overflow-x: overlay;
+  height: 100%;
 }
