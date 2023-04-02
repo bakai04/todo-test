@@ -17,8 +17,8 @@ export const columns: IColumn[] = [
     title: "В процессе",
   },
   {
-    id: "cancelled",
-    title: "Отменённые",
+    id: "onTesting",
+    title: "Тестирование",
   },
   {
     id: "completed",

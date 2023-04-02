@@ -7,8 +7,6 @@ export interface ITask {
   id: string;
   title: string;
   createdAt?: string | null;
-  completedAt?: string | null;
-  cancelledAt?:string | null;
   description: string;
   status: IColumn; 
 }

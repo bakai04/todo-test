@@ -1,99 +1,73 @@
 import React, { useState, FC, FormEvent, FocusEvent } from "react";
 import { useDispatch } from "react-redux";
-import { createTask } from "@/store/tasksSlice";
+import { createTask, ITask } from "@/store/tasksSlice";
 import { toast } from "react-toastify";
+import * as Yup from "yup";
 
 import styles from "./create-task.module.scss";
 import { IColumn } from "@/store/columnSlice";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 
 interface Props {
   onClose: () => void;
   column: IColumn
 }
 
+export const validationSchema = Yup.object().shape({
+  title: Yup.string().required("Обязательное поле").max(100, "Название не должно превышать 100 символов"),
+  description: Yup.string().required("Обязательное поле")
+})
+
 export const TaskForm: FC<Props> = ({ onClose, column }) => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [error, setError] = useState<boolean>(false);
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
-  const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setDescription(event.target.value);
-  };
-
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (title.trim() && description.trim()) {
-      dispatch(
-        createTask({
-          newTask: {
-            title: title.trim(),
-            description: description.trim(),
-          },
-          column: column
-        })
-      );
-
-      setTitle("");
-      setDescription("");
-
-      toast("Task created successfully!");
-      onClose();
-    } else {
-      setError(true);
-    }
-  };
-
-  const handleBlur = (
-    event: FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setError(!event.target.value.trim());
-  };
+  const handleSubmit = (values: Omit<ITask, "id" | "createdAt" | "status">, resetForm: () => void) => {
+    dispatch(
+      createTask({
+        newTask: values,
+        column: column
+      })
+    );
+    resetForm();
+    onClose();
+    toast.success("Task created successfully!");
+  }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <div className={styles.form_title}>
-        <label htmlFor="title">Title:</label>
-        <input
-          type="text"
-          id="title"
-          placeholder="Enter a task title"
-          value={title}
-          onChange={handleTitleChange}
-          onBlur={handleBlur}
-        />
-        {error && !title.trim() && (
-          <p className={styles.error}>Please enter a title.</p>
-        )}
-      </div>
+    <Formik
+      initialValues={{
+        title: "",
+        description: "",
+      }}
+      validateOnBlur
+      validateOnChange
+      validationSchema={validationSchema}
+      onSubmit={(values, { resetForm }) => {
+        handleSubmit(values, resetForm);
+      }}
+    >
+      {() => (
+        <Form className={styles.form}>
+          <div className={styles.form_title}>
+            <label htmlFor="title">Title:</label>
+            <Field name="title" placeholder="Enter a task title" />
+            <ErrorMessage name="title" className={styles.error} component={"p"} />
+          </div>
 
-      <div className={styles.form_description}>
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          placeholder="Enter a task description"
-          value={description}
-          onChange={handleDescriptionChange}
-          onBlur={handleBlur}
-        />
-        {error && !description.trim() && (
-          <p className={styles.error}>Please enter a description.</p>
-        )}
-      </div>
+          <div className={styles.form_description}>
+            <label htmlFor="description">Description:</label>
+            <Field as="textarea" placeholder="Enter a task description" name="description" />
+            <ErrorMessage name="description" className={styles.error} component={"p"} />
+          </div>
 
-      <div className={styles.buttons}>
-        <button type="submit">Add Task</button>
-        <button type="button" onClick={onClose}>
-          Cancel
-        </button>
-      </div>
-    </form>
-  );
+          <div className={styles.buttons}>
+            <button type="submit">Add Task</button>
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
+        </Form>
+      )}
+    </Formik>
+  )
 };

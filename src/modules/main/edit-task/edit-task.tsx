@@ -2,93 +2,71 @@ import React, { useState } from "react";
 import { editTask, ITask } from "@/store/tasksSlice";
 import styles from "./edit-task.module.scss";
 import { useAppDispatch } from "@/store/store";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
 
 interface IEditFormProps {
   onClose: () => void;
   task: ITask;
 }
+
+export const validationSchema = Yup.object().shape({
+  title: Yup.string().required("Обязательное поле").max(100, "Название не должно превышать 100 символов"),
+  description: Yup.string().required("Обязательное поле")
+})
+
 const EditForm: React.FC<IEditFormProps> = ({ onClose, task }) => {
   const dispatch = useAppDispatch();
-  const [title, setTitle] = useState<string>(task.title);
-  const [description, setDescription] = useState<string>(task.description);
-  const [error, setError] = useState<boolean>(false);
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
-  const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setDescription(event.target.value);
-  };
-
-  const handleBlur = (
-    event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    if (event.target.value.trim() === "") {
-      setError(true);
-    } else {
-      setError(false);
-    }
-  };
-
-  const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault();
-
-    if (title.trim() !== "" && description.trim() !== "") {
-      dispatch(
-        editTask({
-          ...task,
-          title: title.trim(),
-          description: description.trim(),
-          id: task.id,
-        })
-      );
-      setTitle("");
-      setDescription("");
-      onClose();
-    } else {
-      setError(true);
-    }
+  const handleSubmit = (values: Omit<ITask, "id" | "createdAt" | "status">, resetForm: () => void) => {
+    dispatch(
+      editTask({
+        ...task,
+        ...values
+      })
+    );
+    onClose();
+    resetForm();
+    toast.success("You successfully changed task")
   };
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <div className={styles.form_title}>
-        <label htmlFor="title">Title:</label>
-        <input
-          type="text"
-          id="title"
-          placeholder="Enter a task title"
-          value={title}
-          onChange={handleTitleChange}
-          onBlur={handleBlur}
-        />
-      </div>
-      {error && title.trim() === "" && (
-        <p className={styles.error}>Please enter a title.</p>
+    <Formik
+      initialValues={{
+        title: task.title || "",
+        description: task.description || "",
+      }}
+      validateOnBlur
+      validateOnChange
+      validationSchema={validationSchema}
+      onSubmit={(values, { resetForm }) => {
+        handleSubmit(values, resetForm);
+      }}
+    >
+      {() => (
+        <Form className={styles.form}>
+          <div className={styles.form_title}>
+            <label htmlFor="title">Title:</label>
+            <Field name="title" placeholder="Enter a task title" />
+            <ErrorMessage name="title" className={styles.error} component={"p"} />
+          </div>
+
+          <div className={styles.form_description}>
+            <label htmlFor="description">Description:</label>
+            <Field as="textarea" placeholder="Enter a task description" name="description" />
+            <ErrorMessage name="description" className={styles.error} component={"p"} />
+          </div>
+
+          <div className={styles.buttons}>
+            <button type="submit">Edit</button>
+            <button type="button" onClick={onClose}>
+              Cancel
+            </button>
+          </div>
+        </Form>
       )}
-      <div className={styles.form_description}>
-        <label htmlFor="description">Description:</label>
-        <textarea
-          id="description"
-          placeholder="Enter a task description"
-          value={description}
-          onChange={handleDescriptionChange}
-          onBlur={handleBlur}
-        />
-      </div>
-      {error && description.trim() === "" && (
-        <p className={styles.error}>Please enter a description.</p>
-      )}
-      <div className={styles.buttons}>
-        <button type="submit">Add Task</button>
-        <button type="button" onClick={onClose}>
-          Cancel
-        </button>
-      </div>
-    </form>
+    </Formik>
   );
 };
 

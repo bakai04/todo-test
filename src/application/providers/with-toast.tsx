@@ -9,14 +9,15 @@ export const withToast = (app: (props: AppProps) => React.ReactNode) => {
       <>
         <ToastContainer
           position="top-right"
-          autoClose={3500}
-          hideProgressBar={true}
+          autoClose={4000}
+          hideProgressBar={false}
           newestOnTop={false}
           closeOnClick
           rtl={false}
           pauseOnFocusLoss
           draggable
           pauseOnHover
+          theme="light"
         />
         {app(props)}
       </>
