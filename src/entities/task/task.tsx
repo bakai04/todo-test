@@ -3,9 +3,8 @@ import EditForm from "@/modules/main/edit-task/edit-task";
 
 import { Button, Modal } from "@/shared/ui";
 import { useAppDispatch } from "@/store/store";
-import { changeTaskStatus, deleteTask, ITask } from "@/store/tasksSlice";
+import { deleteTask, ITask } from "@/store/tasksSlice";
 import styles from "./task.module.scss";
-import { getTaskStatusStyles } from "@/shared/lib";
 
 interface TaskProps {
   task: ITask;
