@@ -1,7 +1,12 @@
 import { actualGetData } from "@/shared/lib";
 import { createSlice } from "@reduxjs/toolkit";
 import { nanoid } from "nanoid";
-import { columns, IColumn } from "./columnSlice";
+import { IColumn } from "./columnSlice";
+
+export interface ISubTask {
+  subTask: string
+  completed: boolean
+}
 
 export interface ITask {
   id: string;
@@ -36,7 +41,7 @@ const tasksSlice = createSlice({
     changeTaskStatus: (state, { payload }) => {
       const { task, nextColumn } = payload;
       state[task.status.id] = state[task.status.id].filter((t) => t.id !== task.id);
-      
+
       if (nextColumn && state[nextColumn.id]) {
         state[nextColumn.id] = [...state[nextColumn.id], {...task, status: nextColumn}];
       } else {

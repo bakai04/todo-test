@@ -1,30 +1,42 @@
-import React, { CSSProperties } from "react";
+import React, { ButtonHTMLAttributes, CSSProperties } from "react";
 import cx from "classnames";
 import styles from "./button.module.scss";
 
-interface IButtonProps {
+export type IButton = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & {
   children: React.ReactNode
   style?: CSSProperties;
   className?: string
   variant?: "outlined" | "fulfilled",
+  htmlType?: ButtonHTMLAttributes<HTMLButtonElement>["type"];
   type?: "primary" | "secondary" | "error"
-  onClick: () => void;
+  onClick?: () => void;
 }
 
-export const Button = (props: IButtonProps) => {
+export const Button = ({
+  type,
+  htmlType,
+  variant,
+  className,
+  children,
+  style,
+  onClick: propsOnClick,
+  ...restProps
+}: IButton) => {
   return (
     <button
-      style={props.style}
-      onClick={props.onClick}
+      style={style}
+      onClick={propsOnClick}
       className={cx(
         styles.button,
-        props.type === "primary" && styles.primary,
-        props.type === "secondary" && styles.secondary,
-        props.type === "error" && styles.error,
-        props.className,
+        type === "primary" && styles.primary,
+        type === "secondary" && styles.secondary,
+        type === "error" && styles.error,
+        className,
       )}
+      type={htmlType}
+      {...restProps}
     >
-      {props.children}
+      {children}
     </button>
   );
 };

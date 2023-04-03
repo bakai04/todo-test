@@ -5,6 +5,7 @@ import { useAppDispatch } from "@/store/store";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import { Button } from "@/shared/ui";
 
 interface IEditFormProps {
   onClose: () => void;
@@ -59,10 +60,10 @@ const EditForm: React.FC<IEditFormProps> = ({ onClose, task }) => {
           </div>
 
           <div className={styles.buttons}>
-            <button type="submit">Edit</button>
-            <button type="button" onClick={onClose}>
+            <Button htmlType="submit">Add Task</Button>
+            <Button htmlType="button" onClick={onClose}>
               Cancel
-            </button>
+            </Button>
           </div>
         </Form>
       )}

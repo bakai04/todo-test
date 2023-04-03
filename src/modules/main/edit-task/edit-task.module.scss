@@ -1,43 +1,68 @@
-@import "@/shared/styles/_root.scss";
 .form {
   display: flex;
   flex-direction: column;
   gap: 10px;
+
+  label {
+    font-weight: 600;
+    font-size: 16px;
+  }
 }
 
 .form_title {
   display: flex;
   flex-direction: column;
-  gap: 5px;
   font-size: 18px;
-  font-weight: 600;
 
   & input {
-    padding: 5px;
-    border-bottom: 1px solid black;
-    font-size: 17px;
-    border-radius: 4px;
+    padding: 10px;
+    border: 1px solid black;
+    font-size: 14px;
+    border-radius: 3px;
   }
 }
 
 .form_description {
   display: flex;
   flex-direction: column;
-  gap: 5px;
   font-size: 18px;
   font-weight: 600;
 
   & textarea {
-    padding: 5px;
-    border-radius: 8px;
+    padding: 10px;
+    border-radius: 3px;
     border: 1px solid black;
-    font-size: 17px;
+    font-size: 14px;
+  }
+}
+
+.form_subTasks {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .subTasks {
+    position: relative;
+  }
+  
+  input {
+    border: 1px solid black;
+    padding: 10px;
+    width: 100%;
+    border-radius: 4px;
+  }
+
+  .delete_icon {
+    position: absolute;
+    right: -15px;
+    top: -15px;
   }
 }
 
 .error {
   color: red;
-  font-size: 16px;
+  font-size: 14px;
+  margin: 0px;
 }
 
 .buttons {
@@ -45,18 +70,4 @@
   justify-content: flex-end;
   gap: 8px;
   margin-top: 8px;
-
-  & button {
-    height: 42px;
-    padding: 0px 14px;
-    background: $primaryColor;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: 0.3s;
-    &:hover {
-      transform: translateY(-2px);
-    }
-  }
 }
