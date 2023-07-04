@@ -1,6 +1,5 @@
-import { actualGetData } from "@/shared/lib";
 import { createSlice } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface IColumn {
   id: string,
@@ -34,7 +33,7 @@ const columnSlice = createSlice({
     createColumn: (state, { payload }) => {
       return [
         ...state,
-        { id: nanoid(), ...payload },
+        { id: uuidv4(), ...payload },
       ];
     },
 

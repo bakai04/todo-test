@@ -1,45 +1,42 @@
-import React, { FC } from "react";
-import { useDispatch } from "react-redux";
-import { createTask, ITask } from "@/store/tasksSlice";
-import { toast } from "react-toastify";
-import * as Yup from "yup";
-
-import styles from "./create-task.module.scss";
-import { IColumn } from "@/store/columnSlice";
+import React, { useState } from "react";
+import { editTask, ITask } from "@/store/task/tasksSlice";
+import styles from "./edit-task.module.scss";
+import { useAppDispatch } from "@/store/store";
 import { ErrorMessage, Field, Form, Formik } from "formik";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
 import { Button } from "@/shared/ui";
 
-interface Props {
+interface IEditFormProps {
   onClose: () => void;
-  column: IColumn
+  task: ITask;
 }
 
-export const validationSchema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
   title: Yup.string().required("Обязательное поле").max(100, "Название не должно превышать 100 символов"),
-  description: Yup.string().required("Обязательное поле"),
+  description: Yup.string().required("Обязательное поле")
 })
 
-export const TaskForm: FC<Props> = ({ onClose, column }) => {
-  const dispatch = useDispatch();
+export const EditForm: React.FC<IEditFormProps> = ({ onClose, task }) => {
+  const dispatch = useAppDispatch();
 
   const handleSubmit = (values: Omit<ITask, "id" | "createdAt" | "status">, resetForm: () => void) => {
     dispatch(
-      createTask({
-        newTask: values,
-        column: column
+      editTask({
+        ...task,
+        ...values
       })
     );
-    resetForm();
     onClose();
-    toast.success("Task created successfully!");
-  }
+    resetForm();
+    toast.success("You successfully changed task")
+  };
 
   return (
     <Formik
       initialValues={{
-        title: "",
-        description: "",
-        subTasks: [""],
+        title: task.title || "",
+        description: task.description || "",
       }}
       validateOnBlur
       validateOnChange
@@ -61,7 +58,7 @@ export const TaskForm: FC<Props> = ({ onClose, column }) => {
             <Field as="textarea" placeholder="Enter a task description" name="description" />
             <ErrorMessage name="description" className={styles.error} component={"p"} />
           </div>
-          
+
           <div className={styles.buttons}>
             <Button htmlType="submit">Add Task</Button>
             <Button htmlType="button" onClick={onClose}>
@@ -71,5 +68,6 @@ export const TaskForm: FC<Props> = ({ onClose, column }) => {
         </Form>
       )}
     </Formik>
-  )
+  );
 };
+

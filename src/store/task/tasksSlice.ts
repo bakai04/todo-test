@@ -1,7 +1,7 @@
 import { actualGetData } from "@/shared/lib";
 import { createSlice } from "@reduxjs/toolkit";
-import { nanoid } from "nanoid";
-import { IColumn } from "./columnSlice";
+import { v4 as uuidv4 } from 'uuid';
+import { IColumn } from "../column/columnSlice";
 
 export interface ISubTask {
   subTask: string
@@ -28,13 +28,12 @@ const tasksSlice = createSlice({
   name: "tasks",
   initialState,
   reducers: {
-
     createTask: (state, { payload }) => {
       const { newTask, column} = payload
       if( state[column.id] ) {
-        state[column.id] = [...state[column.id], { id: nanoid(), status: column, createdAt: actualGetData(), ...newTask }]
+        state[column.id] = [...state[column.id], { id: uuidv4(), status: column, createdAt: actualGetData(), ...newTask }]
       } else {
-        state[column.id] = [{ id: nanoid(), status: column, createdAt: actualGetData(), ...newTask }]
+        state[column.id] = [{ id: uuidv4(), status: column, createdAt: actualGetData(), ...newTask }]
       }
     },
 

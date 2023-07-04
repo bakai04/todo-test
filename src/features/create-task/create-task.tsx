@@ -1,42 +1,45 @@
-import React, { useState } from "react";
-import { editTask, ITask } from "@/store/tasksSlice";
-import styles from "./edit-task.module.scss";
-import { useAppDispatch } from "@/store/store";
-import { ErrorMessage, Field, Form, Formik } from "formik";
-import * as Yup from "yup";
+import React, { FC } from "react";
+import { useDispatch } from "react-redux";
+import { createTask, ITask } from "@/store/task/tasksSlice";
 import { toast } from "react-toastify";
+import * as Yup from "yup";
+
+import styles from "./create-task.module.scss";
+import { IColumn } from "@/store/column/columnSlice";
+import { ErrorMessage, Field, Form, Formik } from "formik";
 import { Button } from "@/shared/ui";
 
-interface IEditFormProps {
+interface Props {
   onClose: () => void;
-  task: ITask;
+  column: IColumn
 }
 
-export const validationSchema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
   title: Yup.string().required("Обязательное поле").max(100, "Название не должно превышать 100 символов"),
-  description: Yup.string().required("Обязательное поле")
+  description: Yup.string().required("Обязательное поле"),
 })
 
-const EditForm: React.FC<IEditFormProps> = ({ onClose, task }) => {
-  const dispatch = useAppDispatch();
+export const TaskForm: FC<Props> = ({ onClose, column }) => {
+  const dispatch = useDispatch();
 
   const handleSubmit = (values: Omit<ITask, "id" | "createdAt" | "status">, resetForm: () => void) => {
     dispatch(
-      editTask({
-        ...task,
-        ...values
+      createTask({
+        newTask: values,
+        column: column
       })
     );
-    onClose();
     resetForm();
-    toast.success("You successfully changed task")
-  };
+    onClose();
+    toast.success("Task created successfully!");
+  }
 
   return (
     <Formik
       initialValues={{
-        title: task.title || "",
-        description: task.description || "",
+        title: "",
+        description: "",
+        subTasks: [""],
       }}
       validateOnBlur
       validateOnChange
@@ -58,7 +61,7 @@ const EditForm: React.FC<IEditFormProps> = ({ onClose, task }) => {
             <Field as="textarea" placeholder="Enter a task description" name="description" />
             <ErrorMessage name="description" className={styles.error} component={"p"} />
           </div>
-
+          
           <div className={styles.buttons}>
             <Button htmlType="submit">Add Task</Button>
             <Button htmlType="button" onClick={onClose}>
@@ -68,7 +71,5 @@ const EditForm: React.FC<IEditFormProps> = ({ onClose, task }) => {
         </Form>
       )}
     </Formik>
-  );
+  )
 };
-
-export default EditForm;

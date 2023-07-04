@@ -1,5 +1,5 @@
 import { Task } from "@/entities/task";
-import { ITask } from "@/store/tasksSlice";
+import { ITask } from "@/store/task/tasksSlice";
 import React, { useState } from "react";
 import styles from "./column-content.module.scss";
 

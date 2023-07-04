@@ -1,6 +1,6 @@
-import { IColumn } from "@/store/columnSlice";
+import { IColumn } from "@/store/column/columnSlice";
 import { useAppDispatch, useAppSelector } from "@/store/store";
-import { changeTaskStatus } from "@/store/tasksSlice";
+import { changeTaskStatus } from "@/store/task/tasksSlice";
 import React, { DragEvent, useMemo, useState } from "react";
 import styles from "./column.module.scss";
 import { ColumnContent } from "./content";
@@ -16,6 +16,7 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
   const [search, setSearch] = useState("");
   const tasks = useAppSelector((state) => state.tasks[columnData.id]);
 
+  console.log(tasks);
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   }

@@ -1,9 +1,9 @@
 import React, { DragEvent, useMemo, useState } from "react";
-import EditForm from "@/modules/main/edit-task/edit-task";
+import { EditForm } from "@/features/edit-task/edit-task";
 
 import { Button, Modal } from "@/shared/ui";
 import { useAppDispatch } from "@/store/store";
-import { deleteTask, ITask } from "@/store/tasksSlice";
+import { deleteTask, ITask } from "@/store/task/tasksSlice";
 import styles from "./task.module.scss";
 
 interface TaskProps {
@@ -38,13 +38,13 @@ export const Task: React.FC<TaskProps> = ({ task }) => {
       onDragStart={handleDragStart}
       onDrop={handleDrop}
     >
-      <span className={styles.title}>{task.title}</span>
+      <span className={styles.title}>{task?.title}</span>
       <div className={styles.buttons}>
         <Button type="secondary" onClick={handleDelete}>Удалить</Button>
         <Button type="secondary" onClick={toggleModal}>Edit</Button>
       </div>
       {isModalOpen && task && (
-        <Modal onClose={toggleModal}>
+        <Modal onClose={toggleModal} data-testid={"edit-modal"}>
           <EditForm onClose={toggleModal} task={task} />
         </Modal>
       )}

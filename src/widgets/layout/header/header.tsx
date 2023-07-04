@@ -37,8 +37,10 @@ export const Header: React.FC<HeaderProps> = () => {
       {visible &&
         <input
           ref={titleInput}
+          name={"new-project-title"}
           value={newTitle}
           onChange={handleChange}
+          placeholder="New Title"
           className={styles.input}
           onKeyPress={handleKeyPress} />}
     </div>

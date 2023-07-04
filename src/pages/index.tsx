@@ -1,5 +1,5 @@
-import { Layout } from "@/modules/layout";
-import { TaskList } from "@/modules/main/task-list";
+import { Layout } from "@/widgets/layout";
+import { TaskList } from "@/widgets/main/task-list";
 
 function Home() {
   return (

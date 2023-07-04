@@ -6,6 +6,7 @@ import { CreateColumn } from "@/entities/column/create";
 
 export const TaskList: FC = () => {
   const columns = useAppSelector((state) => state.column);
+
   return (
     <div className={styles.container}>
       {

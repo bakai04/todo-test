@@ -1,6 +1,6 @@
 import { useOnClickOutside } from "@/shared/lib";
 import { Button, Icons } from "@/shared/ui";
-import { IColumn } from "@/store/columnSlice";
+import { IColumn } from "@/store/column/columnSlice";
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
 import styles from "./column-header.module.scss";
 

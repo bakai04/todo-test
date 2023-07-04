@@ -12,7 +12,7 @@ export const Modal = (props: IModal) => {
   useOnClickOutside(contentRef, props.onClose);
 
   return (
-    <div className={styles.backdrop}>
+    <div className={styles.backdrop} data-testid="backdrop">
       <div className={styles.content} ref={contentRef}>
         {props.children}
       </div>

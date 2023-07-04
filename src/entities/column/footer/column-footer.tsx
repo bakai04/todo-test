@@ -1,6 +1,6 @@
-import { TaskForm } from "@/modules/main/create-task";
+import { TaskForm } from "@/features/create-task";
 import { Button, Modal } from "@/shared/ui";
-import { IColumn } from "@/store/columnSlice";
+import { IColumn } from "@/store/column/columnSlice";
 import React, { useState } from "react";
 import styles from "./column-footer.module.scss";
 

@@ -1,4 +1,4 @@
-import { ColumnForm } from "@/modules/main/create-column";
+import { ColumnForm } from "@/features/create-column";
 import { Icons, Modal } from "@/shared/ui";
 import React, { useState } from "react";
 import styles from "./column-create.module.scss";
