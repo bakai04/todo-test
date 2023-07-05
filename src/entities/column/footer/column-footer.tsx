@@ -17,7 +17,7 @@ export const ColumnFooter: React.FC<ColumnFooterProps> = ({ columnData }) => {
 
   return (
     <>
-      <div className={styles.column_footer}>
+      <div className={styles.column_footer} data-testid={"column-footer"}>
         <Button onClick={toggleTaskModal} type={"secondary"} className={styles.button}>
           Добавить карточку
         </Button>

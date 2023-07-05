@@ -13,7 +13,10 @@ const customJestConfig = {
   },
   transformIgnorePatterns: [
     "/node_modules/(?!(nanoid)/)"
-  ]
+  ],
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+  },
 }
 
 module.exports = createJestConfig(customJestConfig)

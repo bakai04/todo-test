@@ -10,11 +10,11 @@ describe('Task', () => {
   it('should render the task title', () => {
     const { getByText } = render(
       <Provider store={store}>
-        <Task task={mockTasks[0]} />
+        <Task task={mockTasks.new[0]} />
       </Provider>
     );
 
-    const titleElement = getByText(mockTasks[0].title);
+    const titleElement = getByText(mockTasks.new[0].title);
     expect(titleElement).toBeInTheDocument();
   });
 
@@ -22,7 +22,7 @@ describe('Task', () => {
   it('should open the edit modal when "Edit" button is clicked', () => {
     const { getByText, getByTestId } = render(
       <Provider store={store}>
-        <Task task={mockTasks[0]} />
+        <Task task={mockTasks.new[0]} />
       </Provider>
     );
 

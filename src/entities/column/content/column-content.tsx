@@ -9,7 +9,7 @@ interface ColumnContentProps {
 
 export const ColumnContent: React.FC<ColumnContentProps> = ({ tasks }) => {
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.wrapper} data-testid="column-content">
       {
         tasks?.map((task: ITask) => (
           <Task key={task.id} task={task} />

@@ -1,5 +1,5 @@
 import { useOnClickOutside } from "@/shared/lib";
-import { Button, Icons } from "@/shared/ui";
+import { Button } from "@/shared/ui";
 import { IColumn } from "@/store/column/columnSlice";
 import React, { ChangeEvent, FormEvent, useRef, useState } from "react";
 import styles from "./column-header.module.scss";
@@ -26,7 +26,7 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({ columnData, tasksLen
 
   useOnClickOutside(searchRef, toggleInput)
   return (
-    <div className={styles.header}>
+    <div className={styles.header} data-testid="column-header">
       {!searchInputOpen &&
         <p
           className={styles.title}>
@@ -42,8 +42,11 @@ export const ColumnHeader: React.FC<ColumnHeaderProps> = ({ columnData, tasksLen
           className={styles.search_input}
         />}
 
-      <Button type={"secondary"} className={styles.search_button} onClick={toggleInput}>
-        <Icons.Search height={22} />
+      <Button type={"secondary"} className={styles.search_button} data-testid="toggle-search-input" onClick={toggleInput}>
+        <svg width="24" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M11.5 21C16.7467 21 21 16.7467 21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21Z" stroke="#172b4d" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M22 22L20 20" stroke="#172b4d" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </Button>
     </div>
   );

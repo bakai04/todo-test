@@ -35,6 +35,16 @@ export const mockTasks: ITasks = {
       title: "Завершённые",
     },
   }],
+  "new": [{
+    id: '4',
+    title: 'Task 4',
+    createdAt: '2023-07-05T14:45:00',
+    description: 'Description of Task 4',
+    status: {
+      id: "new",
+      title: "Новое",
+    },
+  }],
 };
 
 export const createMockStore = ({ initialState }: any) => {

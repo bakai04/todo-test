@@ -4,3 +4,8 @@ declare module '*module.css' {
   }
   export default styles
 }
+
+declare module '*.svg' {
+  const content: any;
+  export default content;
+}

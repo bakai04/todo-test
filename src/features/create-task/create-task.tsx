@@ -63,7 +63,7 @@ export const TaskForm: FC<Props> = ({ onClose, column }) => {
           </div>
           
           <div className={styles.buttons}>
-            <Button htmlType="submit">Add Task</Button>
+            <Button htmlType="submit" data-testid="add-task">Add Task</Button>
             <Button htmlType="button" onClick={onClose}>
               Cancel
             </Button>

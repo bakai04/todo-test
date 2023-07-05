@@ -16,7 +16,6 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
   const [search, setSearch] = useState("");
   const tasks = useAppSelector((state) => state.tasks[columnData.id]);
 
-  console.log(tasks);
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
   }
@@ -32,6 +31,7 @@ export const Column: React.FC<ColumnProps> = ({ columnData }) => {
 
   return (
     <div
+      data-testid="column"
       onDragOver={handleDragOver}
       onDrop={handleDrop}
       className={styles.column}
